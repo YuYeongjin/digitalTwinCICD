@@ -1,3 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: twinspring
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +21,6 @@ spec:
       containers:
       - name: ollama
         image: ollama/ollama:latest
-        # 컨테이너 시작 후 qwen2.5:14b 모델 자동 pull (이미 있으면 스킵)
         command: ["/bin/sh", "-c"]
         args:
         - |
@@ -46,7 +50,6 @@ spec:
             port: 11434
           initialDelaySeconds: 30
           periodSeconds: 15
-          # 모델 다운로드 시간을 고려해 failureThreshold를 높게 설정
           failureThreshold: 40
         livenessProbe:
           httpGet:
@@ -56,6 +59,5 @@ spec:
           periodSeconds: 30
       volumes:
       - name: ollama-data
-        hostPath:
-          path: /data/ollama
-          type: DirectoryOrCreate
+        persistentVolumeClaim:
+          claimName: ollama-pvc

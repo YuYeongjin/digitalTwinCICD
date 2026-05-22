@@ -1,3 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: twinspring
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -45,9 +50,8 @@ spec:
           periodSeconds: 20
       volumes:
       - name: postgresql-data
-        hostPath:
-          path: /data/postgresql
-          type: DirectoryOrCreate
+        persistentVolumeClaim:
+          claimName: postgresql-pvc
       - name: postgresql-init
         configMap:
           name: postgresql-init-config

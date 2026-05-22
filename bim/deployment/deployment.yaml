@@ -1,3 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: twinspring
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,6 +26,9 @@ spec:
         envFrom:
         - configMapRef:
             name: bim-config
+        volumeMounts:
+        - name: bim-data
+          mountPath: /app/data
         resources:
           requests:
             cpu: 250m
@@ -38,3 +46,7 @@ spec:
             port: 5112
           initialDelaySeconds: 40
           periodSeconds: 20
+      volumes:
+      - name: bim-data
+        persistentVolumeClaim:
+          claimName: bim-pvc
