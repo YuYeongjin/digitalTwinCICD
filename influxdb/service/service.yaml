@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: spring-service
+  name: influxdb-service
   namespace: twinspring
 spec:
   type: NodePort
   ports:
-  - port: 8080
-    targetPort: 8080
-    nodePort: 30080
+  - port: 8086
+    targetPort: 8086
+    nodePort: 30086
   selector:
-    app: spring
+    app: influxdb

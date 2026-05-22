@@ -13,6 +13,14 @@ spec:
       labels:
         app: jenkins
     spec:
+      serviceAccountName: jenkins
+      initContainers:
+      - name: kubectl-installer
+        image: bitnami/kubectl:latest
+        command: ['cp', '/opt/bitnami/kubectl/bin/kubectl', '/kubectl-bin/kubectl']
+        volumeMounts:
+        - name: kubectl-bin
+          mountPath: /kubectl-bin
       containers:
       - name: jenkins
         image: jenkins/jenkins:lts
@@ -22,6 +30,13 @@ spec:
         volumeMounts:
         - name: jenkins-home
           mountPath: /var/jenkins_home
+        - name: kubectl-bin
+          mountPath: /usr/local/bin/kubectl
+          subPath: kubectl
       volumes:
       - name: jenkins-home
+        hostPath:
+          path: /data/jenkins
+          type: DirectoryOrCreate
+      - name: kubectl-bin
         emptyDir: {}

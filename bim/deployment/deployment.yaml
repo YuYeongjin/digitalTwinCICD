@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bim
+  namespace: twinspring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bim
+  template:
+    metadata:
+      labels:
+        app: bim
+    spec:
+      containers:
+      - name: bim
+        image: yeongjin95/twin-bim:latest
+        ports:
+        - containerPort: 5112
+        envFrom:
+        - configMapRef:
+            name: bim-config
+        resources:
+          requests:
+            cpu: 250m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        readinessProbe:
+          tcpSocket:
+            port: 5112
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 5112
+          initialDelaySeconds: 40
+          periodSeconds: 20

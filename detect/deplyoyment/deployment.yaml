@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: detect
+  namespace: twinspring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: detect
+  template:
+    metadata:
+      labels:
+        app: detect
+    spec:
+      containers:
+      - name: detect
+        image: yeongjin95/twin-detect:latest
+        ports:
+        - containerPort: 5001
+        envFrom:
+        - configMapRef:
+            name: detect-config
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1Gi
+          limits:
+            cpu: "1"
+            memory: 2Gi
+        readinessProbe:
+          tcpSocket:
+            port: 5001
+          initialDelaySeconds: 20
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 5001
+          initialDelaySeconds: 40
+          periodSeconds: 20
