@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: twinspring
+  name: mqtt
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: mqtt-config
-  namespace: twinspring
+  namespace: mqtt
 data:
   mosquitto.conf: |
     listener 1883

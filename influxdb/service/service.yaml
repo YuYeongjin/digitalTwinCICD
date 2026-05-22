@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: twinspring
+  name: influxdb
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: influxdb-service
-  namespace: twinspring
+  namespace: influxdb
 spec:
   type: NodePort
   ports:

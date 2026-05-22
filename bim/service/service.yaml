@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: twinspring
+  name: twin-bim
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: bim-service
-  namespace: twinspring
+  namespace: twin-bim
 spec:
   type: ClusterIP
   ports:

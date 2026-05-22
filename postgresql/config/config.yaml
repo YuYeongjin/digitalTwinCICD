@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: twinspring
+  name: postgresql
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgresql-config
-  namespace: twinspring
+  namespace: postgresql
 data:
   POSTGRES_DB: "digital_twin"
   POSTGRES_USER: "postgres"
@@ -17,7 +17,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: postgresql-init-config
-  namespace: twinspring
+  namespace: postgresql
 data:
   init.sql: |
     CREATE EXTENSION IF NOT EXISTS vector;
