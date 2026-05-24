@@ -7,6 +7,19 @@ data:
   POSTGRES_DB: "digital_twin"
   POSTGRES_USER: "postgres"
   POSTGRES_PASSWORD: "Abcd1234"
+
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://postgresql-service.postgresql.svc.cluster.local:5432/digital_twin"
+  SPRING_DATASOURCE_USERNAME: "postgres"
+  SPRING_DATASOURCE_PASSWORD: "Abcd1234"
+
+  DB_CONNECTION_STRING: "Host=postgresql-service.postgresql.svc.cluster.local;Port=5432;Database=digital_twin;Username=postgres;Password=Abcd1234;"
+
+  VECTOR_DB_HOST: "postgresql-service.postgresql.svc.cluster.local"
+  VECTOR_DB_PORT: "5432"
+  VECTOR_DB_NAME: "digital_twin"
+  VECTOR_DB_USER: "postgres"
+  VECTOR_DB_PASSWORD: "Abcd1234"
+
 ---
 apiVersion: v1
 kind: ConfigMap

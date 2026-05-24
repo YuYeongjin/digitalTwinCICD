@@ -12,3 +12,7 @@ data:
   BIM_SERVER_URL: "http://bim-service.twin-bim.svc.cluster.local:5112"
   AGENT_URL: "http://agent-service.twin-agent.svc.cluster.local:7070"
   DETECT_SERVER_URL: "http://detect-service.twin-detect.svc.cluster.local:5001"
+  ALERT_TEMP_MAX: "35.0"
+  ALERT_TEMP_MIN: "10.0"
+  ALERT_HUM_MAX: "80.0"
+  ALERT_HUM_MIN: "20.0"
