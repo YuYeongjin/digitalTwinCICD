@@ -1,9 +1,4 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: twin-agent
----
-apiVersion: v1
 kind: ConfigMap
 metadata:
   name: agent-config
