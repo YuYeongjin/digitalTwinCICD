@@ -14,27 +14,44 @@ spec:
         app: agent
     spec:
       containers:
-      - name: agent
-        image: yeongjin95/twin-agent:latest
-        ports:
-        - containerPort: 7070
-        envFrom:
-        - configMapRef:
-            name: agent-config
-        resources:
-          requests:
-            cpu: 500m
-            memory: 512Mi
-          limits:
-            cpu: "1"
-            memory: 1Gi
-        readinessProbe:
-          tcpSocket:
-            port: 7070
-          initialDelaySeconds: 20
-          periodSeconds: 10
-        livenessProbe:
-          tcpSocket:
-            port: 7070
-          initialDelaySeconds: 40
-          periodSeconds: 20
+        - name: agent
+          image: yeongjin95/twin-agent:latest
+          ports:
+            - containerPort: 7070
+
+          env:
+            - name: HF_HOME
+              value: /app/.cache/huggingface
+
+          envFrom:
+            - configMapRef:
+                name: agent-config
+
+          resources:
+            requests:
+              cpu: "1"
+              memory: 1Gi
+            limits:
+              cpu: "4"
+              memory: 4Gi
+
+          volumeMounts:
+            - name: hf-model-cache
+              mountPath: /app/.cache/huggingface
+
+          readinessProbe:
+            tcpSocket:
+              port: 7070
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 7070
+            initialDelaySeconds: 40
+            periodSeconds: 20
+
+      volumes:
+        - name: hf-model-cache
+          hostPath:
+            path: /var/hf_cache
+            type: DirectoryOrCreate
