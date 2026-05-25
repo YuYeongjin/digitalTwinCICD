@@ -14,15 +14,12 @@ metadata:
     # ── ⚡ [수정] 502 방지: 대용량 응답 버퍼 확장 ────────────────
     # 기존 16k는 물리 연산/BIM 대용량 JSON 데이터를 담지 못해 502를 유발함
     # 첫 버퍼 크기를 128k로 늘리고, 청크 버퍼를 4개 블록 총 1024k(1MB)까지 넉넉하게 확보
-    nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "256k"
     nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
     nginx.ingress.kubernetes.io/proxy-buffers-size: "256k"
-    nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "256k"
+    nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "512k"
 
-    # ── 504 방지: single-pod 재시도 비활성화 ──────────────────
     nginx.ingress.kubernetes.io/proxy-next-upstream: "off"
-
-    # ── IFC / 이미지 업로드 크기 허용 ─────────────────────────
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
 
 spec:
