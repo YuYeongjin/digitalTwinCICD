@@ -5,24 +5,24 @@ metadata:
   namespace: twin-spring
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
-#    cert-manager.io/cluster-issuer: "letsencrypt-duckdns"
-#    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    #    cert-manager.io/cluster-issuer: "letsencrypt-duckdns"
+    #    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 
     # ── 504 방지: 타임아웃 설정 ────────────────────────────────
-    # AI Agent → Ollama LLM 응답이 60초(nginx 기본값)를 초과하면 504 발생
-    # 영어/일본어 대화는 응답 생성이 더 길어 특히 자주 발생함
     nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"    # 1시간 — LLM 장기 응답 대비
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "10"   # upstream 연결 실패는 빠르게 감지
 
-    # ── 504 방지: 응답 버퍼 ───────────────────────────────────
-    # 버퍼가 작으면 LLM 대용량 응답이 임시 파일에 쓰여 지연 발생
-    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
-    nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
+    # ── ⚡ [수정] 502 방지: 대용량 응답 버퍼 확장 ────────────────
+    # 기존 16k는 물리 연산/BIM 대용량 JSON 데이터를 담지 못해 502를 유발함
+    # 첫 버퍼 크기를 128k로 늘리고, 청크 버퍼를 4개 블록 총 1024k(1MB)까지 넉넉하게 확보
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "128k"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "4"
+    nginx.ingress.kubernetes.io/proxy-buffers-size: "256k"
+    nginx.ingress.kubernetes.io/proxy-busy-buffers-size: "256k"
 
     # ── 504 방지: single-pod 재시도 비활성화 ──────────────────
-    # Pod가 하나일 때 재시도는 추가 지연만 유발 → 즉시 오류 반환
     nginx.ingress.kubernetes.io/proxy-next-upstream: "off"
 
     # ── IFC / 이미지 업로드 크기 허용 ─────────────────────────
