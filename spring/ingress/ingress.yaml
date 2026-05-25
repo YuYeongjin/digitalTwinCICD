@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: twin-ingress
+  namespace: twin-spring
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-duckdns"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - yjtwin.duckdns.org
+      secretName: yjtwin-tls-secret
+  rules:
+    - host: yjtwin.duckdns.org
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: spring-service
+                port:
+                  number: 8080
