@@ -28,15 +28,6 @@ metadata:
     # ── IFC / 이미지 업로드 크기 허용 ─────────────────────────
     nginx.ingress.kubernetes.io/proxy-body-size: "50m"
 
-    # ── WebSocket (STOMP) 헤더 전달 ────────────────────────────
-    # nginx-ingress >= 1.0에서 사용하려면 nginx-config.yaml 먼저 적용 필요
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "upgrade";
-      proxy_set_header X-Forwarded-Proto $scheme;
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
 spec:
   ingressClassName: nginx
   tls:

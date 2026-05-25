@@ -5,5 +5,4 @@ resources:
   - config/config.yaml
   - deployment/deployment.yaml
   - service/service.yaml
-  - ingress/nginx-config.yaml
   - ingress/ingress.yaml
