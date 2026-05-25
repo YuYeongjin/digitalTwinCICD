@@ -3,9 +3,9 @@ kind: Ingress
 metadata:
   name: twin-ingress
   namespace: twin-spring
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-duckdns"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+#  annotations:
+#    cert-manager.io/cluster-issuer: "letsencrypt-duckdns"
+#    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
   tls:
