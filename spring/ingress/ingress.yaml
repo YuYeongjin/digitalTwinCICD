@@ -3,9 +3,40 @@ kind: Ingress
 metadata:
   name: twin-ingress
   namespace: twin-spring
-#  annotations:
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 #    cert-manager.io/cluster-issuer: "letsencrypt-duckdns"
 #    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+
+    # ── 504 방지: 타임아웃 설정 ────────────────────────────────
+    # AI Agent → Ollama LLM 응답이 60초(nginx 기본값)를 초과하면 504 발생
+    # 영어/일본어 대화는 응답 생성이 더 길어 특히 자주 발생함
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"    # 1시간 — LLM 장기 응답 대비
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "10"   # upstream 연결 실패는 빠르게 감지
+
+    # ── 504 방지: 응답 버퍼 ───────────────────────────────────
+    # 버퍼가 작으면 LLM 대용량 응답이 임시 파일에 쓰여 지연 발생
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
+
+    # ── 504 방지: single-pod 재시도 비활성화 ──────────────────
+    # Pod가 하나일 때 재시도는 추가 지연만 유발 → 즉시 오류 반환
+    nginx.ingress.kubernetes.io/proxy-next-upstream: "off"
+
+    # ── IFC / 이미지 업로드 크기 허용 ─────────────────────────
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+
+    # ── WebSocket (STOMP) 헤더 전달 ────────────────────────────
+    # nginx-ingress >= 1.0에서 사용하려면 nginx-config.yaml 먼저 적용 필요
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
 spec:
   ingressClassName: nginx
   tls:
