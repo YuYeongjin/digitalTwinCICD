@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: agent
-          image: yeongjin95/twin-agent:22
+          image: yeongjin95/twin-agent:23
           ports:
             - containerPort: 7070
 
