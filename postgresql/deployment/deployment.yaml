@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: postgresql
-        image: pgvector/pgvector:pg16
+        image: timescale/timescaledb-ha:pg16-latest
         ports:
         - containerPort: 5432
         envFrom:
