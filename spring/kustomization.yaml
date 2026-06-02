@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: twin-spring
 resources:
   - config/config.yaml
+  - secret/secret.yaml
   - deployment/deployment.yaml
   - service/service.yaml
   - ingress/ingress.yaml
