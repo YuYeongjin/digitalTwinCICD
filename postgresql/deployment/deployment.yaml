@@ -1,19 +1,62 @@
-initContainers:
-  - name: fix-permissions
-    image: busybox:latest
-    command:
-      - sh
-      - -c
-      - |
-        chown -R 1000:1000 /home/postgres/pgdata/data && chmod -R 700 /home/postgres/pgdata/data        
-        CONF_FILE="/home/postgres/pgdata/data/postgresql.conf"
-        if [ -f "$CONF_FILE" ]; then
-          if ! grep -q "shared_preload_libraries" "$CONF_FILE"; then
-            echo "shared_preload_libraries = 'timescaledb'" >> "$CONF_FILE"
-          fi
-        fi
-    securityContext:
-      runAsUser: 0
-    volumeMounts:
-      - name: postgresql-data
-        mountPath: /home/postgres/pgdata/data
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql
+  namespace: postgresql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresql
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      initContainers:
+        - name: fix-permissions
+          image: busybox:latest
+          command:
+            - sh
+            - -c
+            - chown -R 1000:1000 /home/postgres/pgdata/data && chmod -R 700 /home/postgres/pgdata/data
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: postgresql-data
+              mountPath: /home/postgres/pgdata/data
+      containers:
+        - name: postgresql
+          image: timescale/timescaledb:latest-pg16
+          args:
+            - postgres
+            - -c
+            - shared_preload_libraries=timescaledb
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgresql-config
+          env:
+            - name: PGDATA
+              value: /home/postgres/pgdata/data
+          volumeMounts:
+            - name: postgresql-data
+              mountPath: /home/postgres/pgdata/data
+            - name: init-sql
+              mountPath: /docker-entrypoint-initdb.d/init.sql
+              subPath: init.sql
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+      volumes:
+        - name: postgresql-data
+          persistentVolumeClaim:
+            claimName: postgresql-pvc
+        - name: init-sql
+          configMap:
+            name: postgresql-init-config
