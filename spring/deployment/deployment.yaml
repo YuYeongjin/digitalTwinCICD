@@ -21,8 +21,22 @@ spec:
         envFrom:
         - configMapRef:
             name: spring-config
-        - secretRef:
-            name: spring-secret
+        env:
+          - name: OPENWEATHER_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: spring-credentials
+                key: weather-key
+          - name: SPRING_DATASOURCE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: spring-credentials
+                key: db-user
+          - name: SPRING_DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: spring-credentials
+                key: db-password
         resources:
           requests:
             cpu: 500m

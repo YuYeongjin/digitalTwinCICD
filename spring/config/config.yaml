@@ -5,8 +5,6 @@ metadata:
   namespace: twin-spring
 data:
   SPRING_DATASOURCE_URL: "jdbc:postgresql://postgresql-service.postgresql.svc.cluster.local:5432/digital_twin"
-  SPRING_DATASOURCE_USERNAME: "postgres"
-  SPRING_DATASOURCE_PASSWORD: "Abcd1234"
   MQTT_BROKER_URL: "tcp://mqtt-service.mqtt.svc.cluster.local:1883"
   MQTT_TOPIC: "test/topic"
   BIM_SERVER_URL: "http://bim-service.twin-bim.svc.cluster.local:5112"
