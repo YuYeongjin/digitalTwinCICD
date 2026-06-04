@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: bim
-        image: yeongjin95/twin-bim:80
+        image: yeongjin95/twin-bim:81
         ports:
         - containerPort: 5112
         envFrom:
