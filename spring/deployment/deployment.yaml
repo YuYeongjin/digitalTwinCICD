@@ -37,6 +37,13 @@ spec:
               secretKeyRef:
                 name: spring-credentials
                 key: db-password
+        volumeMounts:
+          - name: host-proc
+            mountPath: /host/proc
+            readOnly: true
+          - name: host-root
+            mountPath: /host-root
+            readOnly: true
         resources:
           requests:
             cpu: 500m
@@ -54,3 +61,12 @@ spec:
             port: 8080
           initialDelaySeconds: 60
           periodSeconds: 20
+      volumes:
+        - name: host-proc
+          hostPath:
+            path: /proc
+            type: Directory
+        - name: host-root
+          hostPath:
+            path: /
+            type: Directory
