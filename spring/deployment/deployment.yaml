@@ -37,6 +37,11 @@ spec:
               secretKeyRef:
                 name: spring-credentials
                 key: db-password
+          - name: TOTP_SETUP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: spring-credentials
+                key: totp-setup-password
         volumeMounts:
           - name: host-proc
             mountPath: /host/proc
