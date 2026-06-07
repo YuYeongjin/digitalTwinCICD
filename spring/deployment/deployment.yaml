@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: spring
-        image: yeongjin95/twin-spring:97
+        image: yeongjin95/twin-spring:99
         ports:
         - containerPort: 8080
         envFrom:
