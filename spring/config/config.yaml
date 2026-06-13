@@ -14,3 +14,5 @@ data:
   ALERT_TEMP_MIN: "10.0"
   ALERT_HUM_MAX: "80.0"
   ALERT_HUM_MIN: "20.0"
+  STORAGE_ENDPOINT: "http://minio-service.minio.svc.cluster.local:9000"
+  STORAGE_BUCKET: "twinspring"
