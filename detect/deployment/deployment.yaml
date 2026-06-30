@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: detect
-        image: yeongjin95/twin-detect:66
+        image: yeongjin95/twin-detect:67
         ports:
         - containerPort: 5001
         envFrom:
