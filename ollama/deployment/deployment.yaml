@@ -19,25 +19,29 @@ spec:
         command: ["/bin/sh", "-c"]
         args:
         - |
-        
           ollama serve &
           OLLAMA_PID=$!
           until ollama list > /dev/null 2>&1; do sleep 2; done
-          ollama pull qwen2.5:3b
-          ollama pull llama3.2:1b
+          ollama pull qwen3:4b         
+          ollama pull llama3.2:1b      
           wait $OLLAMA_PID
         ports:
         - containerPort: 11434
         envFrom:
         - configMapRef:
             name: ollama-config
+        env:
+        - name: OLLAMA_NUM_PARALLEL
+          value: "1"
+        - name: OLLAMA_KEEP_ALIVE   
+          value: "5m"
         volumeMounts:
         - name: ollama-data
           mountPath: /root/.ollama
         resources:
           requests:
             cpu: "2"
-            memory: 8Gi
+            memory: 8Gi         
           limits:
             cpu: "4"
             memory: 16Gi
@@ -45,14 +49,14 @@ spec:
           httpGet:
             path: /api/tags
             port: 11434
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60   
           periodSeconds: 15
           failureThreshold: 40
         livenessProbe:
           httpGet:
             path: /api/tags
             port: 11434
-          initialDelaySeconds: 60
+          initialDelaySeconds: 120   
           periodSeconds: 30
       volumes:
       - name: ollama-data
