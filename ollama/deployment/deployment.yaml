@@ -24,6 +24,8 @@ spec:
           until ollama list > /dev/null 2>&1; do sleep 2; done
           ollama pull qwen3:4b         
           ollama pull llama3.2:1b      
+          printf 'FROM qwen3:4b\nPARAMETER think false\n' > /tmp/Modelfile
+          ollama create twinspring-llm -f /tmp/Modelfile
           wait $OLLAMA_PID
         ports:
         - containerPort: 11434
